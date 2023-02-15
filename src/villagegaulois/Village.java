@@ -64,15 +64,16 @@ public class Village {
 		
 		private Marche(int nbEtal) {
 			etal = new Etal[nbEtal];
+			for (int i = 0; i < nbEtal; i++) {
+				etal[i] = new Etal();
+			}
 		}
 		
 		private void utiliserEtal(int indiceEtal, Gaulois vendeur, String produit, int nbProduit) {
 			if (indiceEtal >= 0 && indiceEtal < etal.length) {
-				if (!etal[indiceEtal].isEtalOccupe()) {
-					etal[indiceEtal].occuperEtal(vendeur, produit, nbProduit);
-				};
+				etal[indiceEtal].occuperEtal(vendeur, produit, nbProduit);
 			};
-		}
+		};
 		
 		private int trouverEtalLibre() {
 			int indiceEtalLibre = -1;
@@ -115,7 +116,8 @@ public class Village {
 		int etalVide = marche.trouverEtalLibre();
 		marche.utiliserEtal(etalVide, vendeur, produit, nbProduit);
 		chaine.append(vendeur.getNom() + " cherche un endroit pour vendre " 
-				+ nbProduit + " " + produit + ".");
+				+ nbProduit + " " + produit + ".\n");
+		chaine.append("Le vendeur " + vendeur.getNom() + " vend des " + produit + " à l'étal n° " + etalVide);
 		return chaine.toString();
 	}
 }
