@@ -8,10 +8,12 @@ public class Village {
 	private Chef chef;
 	private Gaulois[] villageois;
 	private int nbVillageois = 0;
+	private Marche marche;
 
-	public Village(String nom, int nbVillageoisMaximum) {
+	public Village(String nom, int nbVillageoisMaximum, int nbEtalMax) {
 		this.nom = nom;
 		villageois = new Gaulois[nbVillageoisMaximum];
+		marche = new Marche(nbEtalMax);
 	}
 
 	public String getNom() {
@@ -54,6 +56,66 @@ public class Village {
 				chaine.append("- " + villageois[i].getNom() + "\n");
 			}
 		}
+		return chaine.toString();
+	}
+	
+	private static class Marche{
+		private Etal[] etal;
+		
+		private Marche(int nbEtal) {
+			etal = new Etal[nbEtal];
+		}
+		
+		private void utiliserEtal(int indiceEtal, Gaulois vendeur, String produit, int nbProduit) {
+			if (indiceEtal >= 0 && indiceEtal < etal.length) {
+				if (!etal[indiceEtal].isEtalOccupe()) {
+					etal[indiceEtal].occuperEtal(vendeur, produit, nbProduit);
+				};
+			};
+		}
+		
+		private int trouverEtalLibre() {
+			int indiceEtalLibre = -1;
+			int compteur = 0;
+			while (etal[compteur].isEtalOccupe() && compteur < etal.length) {
+				compteur ++;
+			}
+			if (!etal[compteur].isEtalOccupe()) indiceEtalLibre = compteur;
+			return indiceEtalLibre;
+		}
+		
+		private Etal[] trouverEtals(String produit) {
+			int compteurEtalProduits = 0;
+			int horreur = 0;
+			for (int i = 0; i < etal.length; i++) {
+				if (etal[i].contientProduit(produit)) compteurEtalProduits++;
+			}
+			Etal[] etalProduit = new Etal[compteurEtalProduits];
+			for (int i = 0; i < etal.length; i++) {
+				if (etal[i].contientProduit(produit)) {
+					etalProduit[horreur] = etal[compteurEtalProduits];
+				}
+			}
+			return etalProduit;
+		}
+		
+		private Etal trouverVendeur(Gaulois gaulois) {
+			Etal etalVendeur = null;
+			int i = 0; 
+			while( i < etal.length && etalVendeur == null) {
+				if (etal[i].getVendeur() == gaulois) etalVendeur = etal[i];
+				i++;
+			}
+			return etalVendeur;
+		}
+	}
+	
+	public String installerVendeur(Gaulois vendeur, String produit,int nbProduit) {
+		StringBuilder chaine = new StringBuilder();
+		int etalVide = marche.trouverEtalLibre();
+		marche.utiliserEtal(etalVide, vendeur, produit, nbProduit);
+		chaine.append(vendeur.getNom() + " cherche un endroit pour vendre " 
+				+ nbProduit + " " + produit + ".");
 		return chaine.toString();
 	}
 }
