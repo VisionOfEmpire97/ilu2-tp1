@@ -117,7 +117,9 @@ public class Village {
 		marche.utiliserEtal(etalVide, vendeur, produit, nbProduit);
 		chaine.append(vendeur.getNom() + " cherche un endroit pour vendre " 
 				+ nbProduit + " " + produit + ".\n");
+		etalVide += 1;
 		chaine.append("Le vendeur " + vendeur.getNom() + " vend des " + produit + " à l'étal n° " + etalVide);
 		return chaine.toString();
 	}
+	//TODO PARTIE DU TP CLASSE ENGLOBANTE - CLASSE VILLAGE
 }
